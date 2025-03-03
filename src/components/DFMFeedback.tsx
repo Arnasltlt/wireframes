@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 // Define types for our component
 interface DFMSuggestion {
@@ -27,9 +28,22 @@ interface DFMFeedbackProps {
   onUpdateSuggestion: (suggestionId: string, status: 'accepted' | 'rejected', comment?: string) => void;
 }
 
-export default function DFMFeedback({ supplierId, supplierName, suggestions, onUpdateSuggestion }: DFMFeedbackProps) {
+export default function DFMFeedback({
+  supplierId,
+  supplierName,
+  suggestions,
+  onUpdateSuggestion
+}: DFMFeedbackProps) {
   const [activeTab, setActiveTab] = useState<'all' | 'pending' | 'resolved'>('all');
   const [responseComments, setResponseComments] = useState<Record<string, string>>({});
+  const [activeFilter, setActiveFilter] = useState<'all' | 'pending' | 'accepted' | 'rejected'>('all');
+  const [editingSuggestionId, setEditingSuggestionId] = useState<string | null>(null);
+  
+  // Add placeholder usage of supplierId
+  useEffect(() => {
+    // In the future, this will fetch DFM feedback data for the supplier
+    console.log(`Fetching DFM feedback for supplier ${supplierId}`);
+  }, [supplierId]);
   
   const filteredSuggestions = suggestions.filter(suggestion => {
     if (activeTab === 'all') return true;
@@ -139,23 +153,14 @@ export default function DFMFeedback({ supplierId, supplierName, suggestions, onU
               <p className="text-sm text-gray-700 mb-3">{suggestion.description}</p>
               
               {suggestion.imageUrl && (
-                <div className="mb-3 relative">
-                  <img 
-                    src={suggestion.imageUrl} 
-                    alt="DFM suggestion visualization" 
-                    className="border rounded-md max-h-64 object-contain"
+                <div className="flex items-center mb-2">
+                  <Image
+                    src={suggestion.imageUrl}
+                    alt="DFM suggestion illustration"
+                    width={100}
+                    height={100}
+                    className="rounded mr-4"
                   />
-                  
-                  {suggestion.annotations && suggestion.annotations.map((annotation) => (
-                    <div 
-                      key={annotation.id}
-                      className="absolute w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white text-xs transform -translate-x-1/2 -translate-y-1/2"
-                      style={{ left: `${annotation.x}%`, top: `${annotation.y}%` }}
-                      title={annotation.text}
-                    >
-                      <span>!</span>
-                    </div>
-                  ))}
                 </div>
               )}
               

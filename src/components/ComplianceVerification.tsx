@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // Define types for our component
 interface Certification {
@@ -36,6 +36,12 @@ export default function ComplianceVerification({
   const [activeTab, setActiveTab] = useState<'all' | 'required' | 'verified' | 'issues'>('all');
   const [editingCertId, setEditingCertId] = useState<string | null>(null);
   const [editNotes, setEditNotes] = useState<string>('');
+  
+  // Add placeholder usage of supplierId
+  useEffect(() => {
+    // In the future, this will fetch certification data for the supplier
+    console.log(`Fetching certification data for supplier ${supplierId}`);
+  }, [supplierId]);
   
   // Create a map of certification status for easier access
   const certificationStatusMap = supplierCertifications.reduce((acc, cert) => {

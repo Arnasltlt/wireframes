@@ -81,7 +81,10 @@ const mockSupplierOffers = [
 export default function ReviewAndSend() {
   const router = useRouter();
   const [selectedOffer, setSelectedOffer] = useState<number | null>(null);
-  const [sortBy, setSortBy] = useState<string>('price');
+  
+  // Define sortable fields type
+  type SortableField = 'supplierName' | 'price' | 'unitPrice' | 'leadTime' | 'rating';
+  const [sortBy, setSortBy] = useState<SortableField>('price');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   
   // NEW: Tracks which enhancement tab is open
@@ -91,8 +94,8 @@ export default function ReviewAndSend() {
   
   // Sort offers based on current sort settings
   const sortedOffers = [...mockSupplierOffers].sort((a, b) => {
-    let aValue: any = a[sortBy as keyof typeof a];
-    let bValue: any = b[sortBy as keyof typeof b];
+    let aValue = a[sortBy];
+    let bValue = b[sortBy];
     
     // Handle special cases
     if (sortBy === 'leadTime') {
@@ -101,14 +104,22 @@ export default function ReviewAndSend() {
       bValue = parseInt(b.leadTime.split(' ')[0]);
     }
     
-    if (sortOrder === 'asc') {
-      return aValue > bValue ? 1 : -1;
-    } else {
-      return aValue < bValue ? 1 : -1;
+    if (typeof aValue === 'string' && typeof bValue === 'string') {
+      return sortOrder === 'asc' 
+        ? aValue.localeCompare(bValue)
+        : bValue.localeCompare(aValue);
     }
+    
+    if (typeof aValue === 'number' && typeof bValue === 'number') {
+      return sortOrder === 'asc'
+        ? aValue - bValue
+        : bValue - aValue;
+    }
+    
+    return 0;
   });
   
-  const handleSort = (field: string) => {
+  const handleSort = (field: SortableField) => {
     if (sortBy === field) {
       // Toggle sort order if clicking the same field
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');

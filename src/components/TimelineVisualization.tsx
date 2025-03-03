@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // Define types for our component
 interface Milestone {
@@ -33,6 +33,12 @@ export default function TimelineVisualization({
   const [viewMode, setViewMode] = useState<'gantt' | 'list'>('gantt');
   const [priorityMode, setPriorityMode] = useState<'balanced' | 'speed' | 'cost'>('balanced');
   const [expandedMilestoneId, setExpandedMilestoneId] = useState<string | null>(null);
+  
+  // Add placeholder usage of supplierId
+  useEffect(() => {
+    // In the future, this will fetch timeline data for the supplier
+    console.log(`Fetching timeline data for supplier ${supplierId}`);
+  }, [supplierId]);
   
   // Sort milestones by start date
   const sortedMilestones = [...milestones].sort((a, b) => 

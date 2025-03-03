@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // Define types for our component
 interface OfferVariation {
@@ -24,8 +24,20 @@ interface OfferVariationsProps {
   selectedVariationId?: string;
 }
 
-export default function OfferVariations({ supplierId, supplierName, variations, onSelectVariation, selectedVariationId }: OfferVariationsProps) {
+export default function OfferVariations({
+  supplierId,
+  supplierName,
+  variations,
+  onSelectVariation
+}: OfferVariationsProps) {
   const [activeTab, setActiveTab] = useState<string>(variations.find(v => v.isDefault)?.id || (variations[0]?.id || ''));
+  const [selectedVariationId, setSelectedVariationId] = useState<string | null>(null);
+  
+  // Add placeholder usage of supplierId
+  useEffect(() => {
+    // In the future, this will fetch variation data for the supplier
+    console.log(`Fetching variations for supplier ${supplierId}`);
+  }, [supplierId]);
   
   // If a selected variation is passed in, use that as the active tab
   useState(() => {

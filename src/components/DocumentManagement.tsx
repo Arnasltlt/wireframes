@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // Define types for our component
 interface Document {
@@ -50,6 +50,13 @@ export default function DocumentManagement({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [expandedDocumentId, setExpandedDocumentId] = useState<string | null>(null);
   const [newComments, setNewComments] = useState<Record<string, string>>({});
+  const [commentText, setCommentText] = useState<string>('');
+  
+  // Add placeholder usage of supplierId
+  useEffect(() => {
+    // In the future, this will fetch document data for the supplier
+    console.log(`Fetching documents for supplier ${supplierId}`);
+  }, [supplierId]);
   
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {

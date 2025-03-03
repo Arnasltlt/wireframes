@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // Define types for our component
 interface Requirement {
@@ -31,8 +31,14 @@ export default function RequirementConfirmation({
 }: RequirementConfirmationProps) {
   const [editingRequirement, setEditingRequirement] = useState<string | null>(null);
   const [confirmationValues, setConfirmationValues] = useState<Record<string, { isConfirmed: boolean; alternativeValue: string; notes: string }>>({});
+  const [expandedRequirements, setExpandedRequirements] = useState<string[]>([]);
   
   // Initialize confirmation values from requirements
+  useEffect(() => {
+    // In the future, this will fetch requirement data for the supplier
+    console.log(`Fetching requirements for supplier ${supplierId}`);
+  }, [supplierId]);
+  
   useState(() => {
     const initialValues: Record<string, { isConfirmed: boolean; alternativeValue: string; notes: string }> = {};
     requirements.forEach(req => {
